@@ -1,0 +1,95 @@
+
+
+   {% extends 'base.html' %}
+
+{% block title %}Employee List{% endblock %}
+
+{% block content %}
+<h2>Employee List</h2>
+<form method="get" class="form-inline mb-3">
+    <input type="text" name="q" class="form-control mr-2" placeholder="Search by name or email" value="{{ request.GET.q }}">
+    <select name="designation" class="form-control mr-2">
+        <option value="">All Designations</option>
+        <option value="Manager" {% if request.GET.designation == 'Manager' %}selected{% endif %}>Manager</option>
+        <option value="Developer" {% if request.GET.designation == 'Developer' %}selected{% endif %}>Developer</option>
+        <!-- Add more options as needed -->
+    </select>
+    <button type="submit" class="btn btn-primary">Search</button>
+    <a href="{% url 'employee_create' %}" class="btn btn-success ml-2">Add New Employee</a>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Date of Birth</th>
+            <th>Designation</th>
+            <th>Profile Picture</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for employee in employees %}
+        <tr>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.email }}</td>
+            <td>{{ employee.date_of_birth }}</td>
+            <td>{{ employee.designation }}</td>
+            <td>
+                {% if employee.profile_picture %}
+                <img src="{{ employee.profile_picture.url }}" alt="{{ employee.name }}" width="50" height="50">
+                {% else %}
+                No picture
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'employee_update' employee.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'employee_delete' employee.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+{% comment %} <form method="get">
+    <input type="text" name="q" placeholder="Search by name or email">
+    <select name="designation">
+      <option value="">All</option>
+      <!-- Add more options as needed -->
+      <option value="Manager">Manager</option>
+      <option value="Developer">Developer</option>
+    </select>
+    <button type="submit">Search</button>
+  </form>
+  
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Date of Birth</th>
+      <th>Designation</th>
+      <th>Profile Picture</th>
+      <th>Actions</th>
+    </tr>
+    {% for employee in employees %}
+    <tr>
+      <td>{{ employee.name }}</td>
+      <td>{{ employee.email }}</td>
+      <td>{{ employee.date_of_birth }}</td>
+      <td>{{ employee.designation }}</td>
+      <td>
+        {% if employee.profile_picture %}
+        <img src="{{ employee.profile_picture.url }}" alt="{{ employee.name }}" width="50" height="50">
+        {% else %}
+        No picture
+        {% endif %}
+      </td>
+      <td>
+        <a href="{% url 'employee_update' employee.pk %}">Edit</a>
+        <a href="{% url 'employee_delete' employee.pk %}">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+   {% endcomment %}
